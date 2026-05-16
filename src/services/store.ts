@@ -3,12 +3,16 @@ import ingredientsReducer from './slices/ingredientsSlice';
 import constructorReducer from './slices/constructorSlice';
 import userReducer from './slices/userSlice';
 import orderReducer from './slices/orderSlice';
+import feedReducer from './slices/feedSlice';
+import userOrdersReducer from './slices/userOrdersSlice';
 
 const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: constructorReducer,
   user: userReducer,
-  order: orderReducer
+  order: orderReducer,
+  feed: feedReducer,
+  userOrders: userOrdersReducer
 });
 
 export const store = configureStore({

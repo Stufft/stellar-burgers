@@ -10,31 +10,35 @@ import {
   TLoginData
 } from '../../utils/burger-api';
 
-// Регистрация
+import { setCookie, deleteCookie } from '../../utils/cookie';
+
 export const registerUser = createAsyncThunk(
   'user/register',
   async (data: TRegisterData) => {
     const res = await registerUserApi(data);
+
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setCookie('accessToken', res.accessToken);
     return res.user;
   }
 );
 
-// Логин
 export const loginUser = createAsyncThunk(
   'user/login',
   async (data: TLoginData) => {
     const res = await loginUserApi(data);
+
+    localStorage.setItem('refreshToken', res.refreshToken);
+    setCookie('accessToken', res.accessToken);
     return res.user;
   }
 );
 
-// Проверка пользователя (нужна при обновлении страницы)
 export const checkUserAuth = createAsyncThunk('user/checkAuth', async () => {
   const res = await getUserApi();
   return res.user;
 });
 
-// Обновление данных в профиле
 export const updateUser = createAsyncThunk(
   'user/update',
   async (data: Partial<TRegisterData>) => {
@@ -43,14 +47,16 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-// Выход из аккаунта
 export const logoutUser = createAsyncThunk('user/logout', async () => {
   await logoutApi();
+
+  localStorage.removeItem('refreshToken');
+  deleteCookie('accessToken');
 });
 
 interface UserState {
   user: TUser | null;
-  isAuthChecked: boolean; // Флаг: проверили ли мы токен
+  isAuthChecked: boolean;
   error: string | null;
 }
 
@@ -66,7 +72,6 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Обработка проверки авторизации
       .addCase(checkUserAuth.pending, (state) => {
         state.isAuthChecked = false;
       })
@@ -76,9 +81,9 @@ const userSlice = createSlice({
       })
       .addCase(checkUserAuth.rejected, (state) => {
         state.user = null;
-        state.isAuthChecked = true; // Проверка прошла, но юзер не найден (например, нет токена)
+        state.isAuthChecked = true;
       })
-      // Обработка логина
+
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthChecked = true;
@@ -87,18 +92,18 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.error.message || 'Ошибка входа';
       })
-      // Обработка регистрации
+
       .addCase(registerUser.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuthChecked = true;
       })
-      // Обработка обновления юзера
+
       .addCase(updateUser.fulfilled, (state, action) => {
         state.user = action.payload; // Записываем новые данные
       })
-      // Обработка выхода
+
       .addCase(logoutUser.fulfilled, (state) => {
-        state.user = null; // Очищаем юзера при выходе
+        state.user = null;
       });
   }
 });

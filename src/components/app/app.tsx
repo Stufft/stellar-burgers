@@ -39,8 +39,6 @@ export const App: FC = () => {
   };
 
   return (
-    // Этот контейнер теперь ВСЕГДА на месте. React никогда его не удалит,
-    // что навсегда защищает от ошибки removeChildFromContainer
     <div
       id='app-viewport'
       style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}

@@ -12,33 +12,28 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  // 1. Достаем данные конструктора из стора
   const { bun, ingredients } = useSelector(
     (state: RootState) => state.burgerConstructor
   );
 
-  // 2. Достаем статус заказа и пользователя
   const { orderData, orderRequest } = useSelector(
     (state: RootState) => state.order
   );
   const { user } = useSelector((state: RootState) => state.user);
 
-  // Формируем объект пропсов для UI-компонента
   const constructorItems = {
     bun: bun,
     ingredients: ingredients
   };
 
   const onOrderClick = () => {
-    // Если не залогинен - кидаем на логин
     if (!user) {
       navigate('/login');
       return;
     }
-    // Если нет булки или запрос уже летит - ждем
+
     if (!bun || orderRequest) return;
 
-    // Собираем ID: булка, все начинки, булка
     const ingredientIds = [
       bun._id,
       ...ingredients.map((item) => item._id),
@@ -49,7 +44,6 @@ export const BurgerConstructor: FC = () => {
   };
 
   const closeOrderModal = () => {
-    // При закрытии модалки очищаем данные заказа и саму корзину
     dispatch(clearOrderData());
     dispatch(clearConstructor());
   };

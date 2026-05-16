@@ -9,7 +9,6 @@ export const Login: FC = () => {
 
   const error = useSelector((state: RootState) => state.user.error);
 
-  // Локальный стейт для полей формы
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
