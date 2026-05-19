@@ -1,21 +1,19 @@
-.containerMain {
+.container {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  max-width: 1240px;
-  margin: 0 auto;
-}
-
-.title {
+  padding: 0 40px;
   width: 100%;
-  max-width: 1260px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  height: calc(100vh - 120px); 
+  overflow: hidden;
 }
 
 .main {
   display: flex;
   justify-content: space-between;
-  height: 100%;
-  overflow: hidden;
+  gap: 80px; 
+  flex: 1;
+  min-height: 0; 
 }
