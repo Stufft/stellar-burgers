@@ -27,21 +27,18 @@ export const OrderInfo: FC = () => {
     const num = Number(number);
 
     return (
+      (fetchedOrder?.number === num ? fetchedOrder : null) ||
       feedOrders.find((o) => o.number === num) ||
       userOrders.find((o) => o.number === num) ||
-      (fetchedOrder?.number === num ? fetchedOrder : null)
+      null
     );
   }, [feedOrders, userOrders, fetchedOrder, number]);
 
   useEffect(() => {
-    if (!orderData && number) {
+    if (number) {
       dispatch(getOrderByNumber(Number(number)));
     }
-  }, [dispatch, orderData, number]);
-
-  if (!orderData) {
-    return <Preloader />;
-  }
+  }, [dispatch, number]);
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
@@ -52,23 +49,25 @@ export const OrderInfo: FC = () => {
       [key: string]: TIngredient & { count: number };
     };
 
-    const ingredientsInfo = orderData.ingredients.reduce(
-      (acc: TIngredientsWithCount, item: string) => {
-        if (!acc[item]) {
-          const ingredient = ingredients.find((ing) => ing._id === item);
+    const ingredientsInfo = orderData.ingredients.reduce<TIngredientsWithCount>(
+      (acc, item) => {
+        const id = item as string;
+
+        if (!acc[id]) {
+          const ingredient = ingredients.find((ing) => ing._id === id);
           if (ingredient) {
-            acc[item] = {
+            acc[id] = {
               ...ingredient,
               count: 1
             };
           }
         } else {
-          acc[item].count++;
+          acc[id].count++;
         }
 
         return acc;
       },
-      {} as TIngredientsWithCount
+      {}
     );
 
     const total = Object.values(ingredientsInfo).reduce(
@@ -84,7 +83,7 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (!orderInfo) {
+  if (!orderData || !orderInfo) {
     return <Preloader />;
   }
 

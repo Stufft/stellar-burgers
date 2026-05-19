@@ -58,6 +58,9 @@ const orderSlice = createSlice({
         state.orderRequest = false;
         state.orderError = action.error.message || 'Ошибка при создании заказа';
       });
+    builder.addCase(getOrderByNumber.fulfilled, (state, action) => {
+      state.orderByNumber = action.payload;
+    });
   }
 });
 
