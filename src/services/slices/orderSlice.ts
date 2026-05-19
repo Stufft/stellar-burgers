@@ -29,7 +29,7 @@ interface OrderState {
   orderByNumber: TOrder | null;
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   orderData: null,
   orderRequest: false,
   orderError: null,
