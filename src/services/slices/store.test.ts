@@ -1,42 +1,22 @@
 import { rootReducer } from '../store';
+import { initialState as constructorInitialState } from './constructorSlice';
+import { initialState as feedInitialState } from './feedSlice';
+import { initialState as ingredientsInitialState } from './ingredientsSlice';
+import { initialState as orderInitialState } from './orderSlice';
+import { initialState as userOrdersInitialState } from './userOrdersSlice';
+import { initialState as userInitialState } from './userSlice';
 
 describe('rootReducer', () => {
   it('initializes the store with all slice initial states', () => {
     const state = rootReducer(undefined, { type: 'UNKNOWN_ACTION' });
 
     expect(state).toEqual({
-      ingredients: {
-        ingredients: [],
-        loading: false,
-        error: null
-      },
-      burgerConstructor: {
-        bun: null,
-        ingredients: []
-      },
-      user: {
-        user: null,
-        isAuthChecked: false,
-        error: null
-      },
-      order: {
-        orderData: null,
-        orderRequest: false,
-        orderError: null,
-        orderByNumber: null
-      },
-      feed: {
-        orders: [],
-        total: 0,
-        totalToday: 0,
-        loading: false,
-        error: null
-      },
-      userOrders: {
-        orders: [],
-        loading: false,
-        error: null
-      }
+      ingredients: ingredientsInitialState,
+      burgerConstructor: constructorInitialState,
+      user: userInitialState,
+      order: orderInitialState,
+      feed: feedInitialState,
+      userOrders: userOrdersInitialState
     });
   });
 });
